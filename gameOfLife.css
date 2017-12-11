@@ -11,7 +11,7 @@ svg {
 	cursor: pointer;
 }
 
-.panel {
+.dashboard {
 	position: fixed;
 	padding: 20px;
 	background-color: rgba(0, 0, 0, 0.6);
@@ -21,24 +21,23 @@ svg {
 	cursor: default;
 }
 
-#instructions_panel {
+#instructions_dashboard {
 	top: 20px;
 	left: 20px;
 	width: 550px;
 }
 
-#hide_instructions {
-	position: absolute;
-	right: 25px;
-	top: 10px;
-	font-size: 90%;
-	cursor: pointer;
-}
-
-#instructions_panel {
+#accordion_dashboard {
 	top: 20px;
 	left: 20px;
 	width: 550px;
+}
+
+#button_dashboard {
+	top: 20px;
+	right: 20px;
+	width: 200px;
+	text-align: center;
 }
 
 .header_title {
@@ -46,4 +45,63 @@ svg {
 	font-weight: bold;
 	padding-bottom: 5px;
 	margin-top: -10px;
+}
+
+button {
+	border: none;
+	background: rgba(255, 255, 255, 0.7);
+	border-radius: 5px;
+	font-size: 90%;
+	cursor: pointer;
+	padding: 2px 8px;
+	margin: 0 2%;
+	width: 31%;
+	min-height: 40px;
+	margin: 2px;
+}
+
+button:hover {
+	border: none;
+	background: rgba(255, 255, 255, 0.9);
+}
+
+button:focus, input:focus {
+	outline: 0;
+}
+
+.speed_button {
+	width: 46%;
+	background: rgba(0, 0, 0, 0) !important;
+	display: inline-flex;
+}
+
+.speed_button > p {
+	margin-left: 5px;
+}
+
+input {
+	height: 30px;
+	border-radius: 5px;
+	text-align: center;
+}
+
+#new-map {
+	margin-left: 50px;
+}
+
+h3 {
+	background: rgba(0, 0, 0, 0.5) !important;
+	border: none !important;
+	color: white !important;
+}
+
+div {
+	background: rgba(0, 0, 0, 0.3) !important;
+	border: none !important;
+	color: white !important;
+	text-align: center;
+}
+
+.error {
+	text-align: center;
 }
