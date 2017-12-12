@@ -162,7 +162,7 @@ $(() => {
 	let loopGrid = (option, grid = gameLifeBoard) => {
 		var cnt = 0;
 		for (var i = 0; i < grid.length ; i++) {
-			for (var j = 0; j < grid[i].length ; j++) {
+			for (var j = 0; j < grid[j].length ; j++) {
 				if (option.clear)
 					grid[i][j] = 0;
 				if (option.random)
