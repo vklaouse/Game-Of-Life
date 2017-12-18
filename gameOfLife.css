@@ -23,14 +23,26 @@ svg {
 
 #instructions_dashboard {
 	top: 20px;
-	left: 20px;
-	width: 550px;
+	right: 20px;
+	width: 300px;
+}
+
+.helper {
+	float: right;
+	cursor: pointer;
 }
 
 #accordion_dashboard {
-	top: 20px;
-	left: 20px;
-	width: 550px;
+	top: 160px;
+	right: 20px;
+	width: 505px;
+}
+
+#hide_dashboard {
+	cursor: pointer;
+	float: left;
+    font-size: 50px;
+    margin-top: -30px;
 }
 
 #button_dashboard {
@@ -45,6 +57,11 @@ svg {
 	font-weight: bold;
 	padding-bottom: 5px;
 	margin-top: -10px;
+}
+
+.ghost-patern {
+	position: absolute;
+	pointer-events: none;
 }
 
 button {
@@ -83,6 +100,8 @@ input {
 	height: 30px;
 	border-radius: 5px;
 	text-align: center;
+	float: left;
+	height: 43px;
 }
 
 #new-map {
@@ -100,6 +119,17 @@ div {
 	border: none !important;
 	color: white !important;
 	text-align: center;
+}
+
+.ui-tooltip, .ui-tooltip-content {
+	background: white !important;
+	color: black !important;
+}
+
+.border {
+	padding:10px;
+	width: 27%;
+	display: inline-block;
 }
 
 .error {

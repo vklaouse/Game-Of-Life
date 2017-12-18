@@ -1,23 +1,54 @@
+var gameLifeBoard = [];
 $(() => {
 
 	var defaultConfig = {
 		caseSize: 30,
 		caseWidthNbr: Math.round((window.innerWidth || document.body.clientWidth) / 30),
 		caseHeightNbr: Math.round((window.innerHeight || document.body.clientHeight) / 30),
-		speed: 210
+		speed: 210,
+		realXSize: 100,
+		realYSize: 100,
+		displayType: "Fixed"
 	};
 	var refreshIntervalGOL;
-	var gameLifeBoard = [];
+	// var gameLifeBoard = [];
+	var patterns = {
+		Glider: [[0, 1, 1, 0, 0, 1, 1, 0],
+				 [1, 1, 0, 0, 0, 0, 1, 1],
+				 [0, 0, 1, 0, 0, 1, 0, 0],
+				 [0, 0, 0, 0, 0, 0, 0, 0],
+				 [0, 0, 0, 0, 0, 0, 0, 0],
+				 [0, 0, 1, 0, 0, 1, 0, 1],
+				 [1, 1, 0, 0, 0, 0, 1, 1],
+				 [0, 1, 1, 0, 0, 0, 1, 0]],
+		LWSS:  [[0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0],
+				[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+				[1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1],
+				[1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]],
+		Pulsar: [[0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0],
+				 [0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0],
+				 [1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1],
+				 [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1],
+				 [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+				 [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
+				 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				 [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
+				 [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+				 [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1],
+				 [1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1],
+				 [0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0],
+				 [0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0]]
+	}
 
 	let caseModifySate = ($this, state) => {
 		var x = $this.attr(`x`) / defaultConfig.caseSize;
 		var y = $this.attr(`y`) / defaultConfig.caseSize;
 		if (state) {
-			gameLifeBoard[x][y] = 0;
+			gameLifeBoard[y][x] = 0;
 			$this.attr(`fill`, `white`);
 		}
 		else {
-			gameLifeBoard[x][y] = 1;
+			gameLifeBoard[y][x] = 1;
 			$this.attr(`fill`, `rgb(128, 128, 128)`);
 		}
 	};
@@ -29,7 +60,7 @@ $(() => {
 			var $this = $(event.currentTarget);
 			var x = $this.attr(`x`) / defaultConfig.caseSize;
 			var y = $this.attr(`y`) / defaultConfig.caseSize;
-			var state = gameLifeBoard[x][y];
+			var state = gameLifeBoard[y][x];
 			$rect.off(`mouseover click`).on(`mouseover click`, (event) => {
 				$panel.css(`pointer-events`, `none`);
 				if (!state) {
@@ -71,14 +102,15 @@ $(() => {
 	let buildGrid = (config = defaultConfig) => {
 		var rect;
 		var id = 0;
+		gameLifeBoard = [];
 		$(`body`).prepend(`<svg width="`+ config.caseWidthNbr * config.caseSize +`"
 					height="`+ config.caseHeightNbr * config.caseSize +`"
 					xmlns="http://www.w3.org/2000/svg" id="grid"></svg>`);
-		for (var i = 0; i < config.caseWidthNbr; i++) {
+		for (var i = 0; i < config.caseHeightNbr; i++) {
 			gameLifeBoard[i] = [];
-			for (var j = 0; j < config.caseHeightNbr; j++) {
+			for (var j = 0; j < config.caseWidthNbr; j++) {
 				gameLifeBoard[i][j] = 0;
-				rect = makeSVG(`rect`, {x: i * config.caseSize, y: j * config.caseSize,
+				rect = makeSVG(`rect`, {x: j * config.caseSize, y: i * config.caseSize,
 										width: config.caseSize, height: config.caseSize,
 										fill: '#ffffff', stroke: '#000', 'stroke-opacity': '0.2',
 										id: id++});
@@ -159,6 +191,24 @@ $(() => {
 		});
 	};
 
+	let btnHideDashBoard = () => {
+		$(`#hide_dashboard`).off(`click`).on(`click`, (event) => {
+			$(`#accordion`).css(`display`,`none`);
+			$(`#accordion_dashboard > header`).css(`display`,`none`);
+			$(`#accordion_dashboard`).css({width: `20px`, height: `7px`});
+			btnShowDashBoard();
+		});
+	};
+
+	let btnShowDashBoard = () => {
+		$(`#hide_dashboard`).off(`click`).on(`click`, (event) => {
+			$(`#accordion`).css(`display`,``);
+			$(`#accordion_dashboard > header`).css(`display`,``);
+			$(`#accordion_dashboard`).css({width: `505px`, height: `auto`});
+			btnHideDashBoard();
+		});
+	};
+
 	let loopGrid = (option, grid = gameLifeBoard) => {
 		var cnt = 0;
 		for (var i = 0; i < grid.length ; i++) {
@@ -179,7 +229,7 @@ $(() => {
 
 	let dashboardEvents = () => {
 		$(`.ui-draggable`).draggable();
-
+		$(`.helper`).tooltip();
 		$(`#accordion`).accordion({
 			heightStyle: "content"
 		});
@@ -189,24 +239,131 @@ $(() => {
 		btnSlower();
 		btnFaster();
 		btnNewMap();
-		btnRandomMap();
+		btnHideDashBoard();
+		btnPatterns();
 	};
 
-	let celLiveOrDie = (x, y, gameBoard) => {
+	let getPattern = (pattern, config = defaultConfig) => {
+		var $pattern = `<svg class="ghost-patern" width="`+ pattern[0].length * config.caseSize +`"
+						height="`+ pattern.length * config.caseSize +`">`;
+		for (var y = 0; y < pattern.length; y++) {
+			for (var x = 0; x < pattern[y].length; x++) {
+				if (pattern[y][x])
+					$pattern = $pattern + `<rect x="`+ config.caseSize * x +`" 
+									y="`+ config.caseSize * y +`" width="`+ config.caseSize +`"
+									height="`+ config.caseSize +`" fill="rgb(255, 105, 80)" stroke="#000"></rect>`;
+				else
+					$pattern = $pattern + `<rect opacity="0" x="`+ config.caseSize * x +`" 
+									y="`+ config.caseSize * y +`" width="`+ config.caseSize +`"
+									height="`+ config.caseSize +`" ></rect>`;
+			}
+		}
+		$pattern = $pattern + `</svg>`;
+		$(`body`).append($pattern);
+		$(`#grid`).off(`mousemove`).on('mousemove', function(event){
+			$('.ghost-patern').css({
+				left: event.pageX - config.caseSize / 2,
+				top: event.pageY - config.caseSize /2
+			});
+			$(`rect`).off(`mousedown`).off(`click`).on(`click`, (event) => {
+				var $this = $(event.currentTarget);
+				var x = $this.attr('x') / config.caseSize;
+				var y = $this.attr('y') / config.caseSize;
+				for (var i = 0; i < pattern.length; i++) {
+					for (var j = 0; j < pattern[i].length; j++) {
+						if (i + y >= gameLifeBoard.length || j + x >= gameLifeBoard[i].length) {
+							break ;
+						}
+						gameLifeBoard[i + y][j + x] = pattern[i][j];
+					}
+				}
+				$('.ghost-patern').remove();
+				loopGrid({display: 1});
+				$(`#grid`).off(`mousemove`);
+				caseEvent();
+			});
+		});
+		
+	};
+
+	let btnGlider = () => {
+		$(`#Glider`).off(`click`).on(`click`, (event) => {
+			var $this = $(event.currentTarget);
+			getPattern(patterns[$this.attr('pattern')]);
+		});
+	};
+
+	let btnLWSS = () => {
+		$(`#LWSS`).off(`click`).on(`click`, (event) => {
+			var $this = $(event.currentTarget);
+			getPattern(patterns[$this.attr('pattern')]);
+		});
+	};
+
+	let btnPulsar = () => {
+		$(`#Pulsar`).off(`click`).on(`click`, (event) => {
+			var $this = $(event.currentTarget);
+			getPattern(patterns[$this.attr('pattern')]);
+		});
+	};
+
+	let btnPatterns = () => {
+		btnRandomMap();
+		btnGlider();
+		btnLWSS();
+		btnPulsar();
+	};
+
+	let celLiveOrDie = (x, y, gameBoard, config = defaultConfig) => {
 		var partener = 0;
-		for (var i = x - 1; i < x + 2; i++) {
-			for (var j = y - 1; j < y + 2; j++) {
-				if (i >= 0 && i < gameBoard.length &&
-					j >= 0 && j < gameBoard[i].length) {
+		var xTmp = 0;
+		var yTmp = 0;
+		for (var i = y - 1; i < y + 2; i++) {
+			for (var j = x - 1; j < x + 2; j++) {
+				xTmp = j;
+				yTmp = i;
+				// console.log(gameBoard, i , j , xTmp, yTmp)
+				if (config.displayType == 'Fixed') {
+					if (i >= 0 && i < gameBoard.length &&
+						j >= 0 && j < gameBoard[i].length) {
+						partener++;
+						if (!gameBoard[yTmp][xTmp] || (yTmp == y && xTmp == x))
+							partener--;
+					}
+				}
+				else if (config.displayType == 'Loop') {
+					// console.log(config.caseHeightNbr, i , config.caseWidthNbr, j)
+					if (i < 0) {
+						yTmp = config.caseHeightNbr + i;
+						console.log("-y","-"+ yTmp)
+					}
+					if (j < 0) {
+						xTmp = config.caseWidthNbr + j;
+						console.log("-x","-"+ xTmp)
+					}
+					// console.log(config.caseHeightNbr, gameBoard.length,config.caseWidthNbr, gameBoard.length)
+					if (i > config.caseHeightNbr) {
+						yTmp = i - config.caseHeightNbr;
+						console.log("+y","+"+ yTmp)
+					}
+					if (j > config.caseWidthNbr) {
+						xTmp = j - config.caseWidthNbr;
+						console.log("+x","+"+ xTmp)
+					}
+					// console.log(j, i,xTmp, yTmp, config.caseWidthNbr, config.caseHeightNbr)
+					// console.log(gameBoard[0].length, config.caseWidthNbr)
+					break;
 					partener++;
-					if (!gameBoard[i][j] || (x == i && j == y))
+					if (!gameBoard[yTmp][xTmp] || (yTmp == y && xTmp == x))
 						partener--;
+
 				}
 			}
 		}
-		if (partener == 2 && gameBoard[x][y])
+		// console.log(partener)
+		if (partener == 2 && gameBoard[y][x])
 			return 1;
-		else if (partener == 2 && !gameBoard[x][y])
+		else if (partener == 2 && !gameBoard[y][x])
 			return 0;
 		else if (partener == 3)
 			return 1;
@@ -219,7 +376,7 @@ $(() => {
 		for (var i = 0; i < gameBoard.length; i++) {
 			nextGenBoard[i] = [];
 			for (var j = 0; j < gameBoard[i].length; j++) {
-				nextGenBoard[i][j] = celLiveOrDie(i, j, gameBoard);
+				nextGenBoard[i][j] = celLiveOrDie(j, i, gameBoard);
 				if (nextGenBoard[i][j] != gameBoard[i][j])
 					nextGenBoard[i][j] == 1 ? 
 						$(`#`+ cnt).attr(`fill`, `rgb(128, 128, 128)`) : $(`#`+ cnt).attr(`fill`, `white`);

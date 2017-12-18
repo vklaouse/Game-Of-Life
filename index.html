@@ -11,27 +11,31 @@
 		<script type="text/javascript" src="./gameOfLife.js"></script>
 	</head>
 	<body>
+		<div id="instructions_dashboard" class="dashboard ui-draggable">
+			<header>
+				<h2 class="header_title">Play<span class="ui-icon ui-icon-help helper" title="Buttons: Play for start / Pause for interrupt / Stop for reset"></span></h2>
+			</header>
+			<button id="start">
+				<span class="ui-icon ui-icon-play"></span>
+				Start 
+			</button>
+			<button id="pause">
+				<span class="ui-icon ui-icon-pause"></span>
+				Pause
+			</button>
+			<button id="stop">
+				<span class="ui-icon ui-icon-stop"></span>
+				Stop
+			</button>
+		</div>
 		<div id="accordion_dashboard" class="dashboard ui-draggable">
+			<span id="hide_dashboard">-</span>
 			<header>
 				<h2 class="header_title">Settings</h2>
 			</header>
 			<div id="accordion">
-				<h3>Play</h3>
-				<div>
-					<button id="start">
-						<span class="ui-icon ui-icon-play"></span>
-						Start 
-					</button>
-					<button id="pause">
-						<span class="ui-icon ui-icon-pause"></span>
-						Pause
-					</button>
-					<button id="stop">
-						<span class="ui-icon ui-icon-stop"></span>
-						Stop
-					</button>
-				</div>
-				<h3>Speed</h3>
+				
+				<h3>Speed<span class="ui-icon ui-icon-help helper" title="Set the game as Pause for decrease or increase the generation by sec"></span></h3>
 				<div>
 					<div class="speed_button">
 						<button id="slower">
@@ -48,7 +52,7 @@
 						<p>- 0.2sec/generation</p>
 					</div>
 				</div>
-				<h3>New map</h3>
+				<h3>Build new map<span class="ui-icon ui-icon-help helper" title="Chose size of cells and generate a new map"></span></h3>
 				<div>
 					<label>
 						Cell size:
@@ -58,7 +62,28 @@
 						<span class="ui-icon  ui-icon-scissors"></span>
 						New map
 					</button>
+				</div>
+				<h3>Patterns<span class="ui-icon ui-icon-help helper" title="Chose a pattern and place it on the map"></span></h3>
+				<div>
 					<button id="random">Random map</button>
+					<button id="Glider" pattern="Glider">Gliders</button>
+					<button id="LWSS" pattern="LWSS">LWSS</button>
+					<button id="Pulsar" pattern="Pulsar">Pulsar</button>
+				</div>
+				<h3>Borders<span class="ui-icon ui-icon-help helper" title="Chose a border type for you board"></span></h3>
+				<div>
+					<label class="border" type="fixed">
+						<input type="radio" name="border" checked>
+						<p>Fixed</p>
+					</label>
+					<!-- <label class="border" type="Infinite">
+						<input type="radio" name="border">
+						<p>Infinite</p>
+					</label> -->
+					<label class="border" type="loop">
+						<input type="radio" name="border">
+						<p>Loop</p>
+					</label>
 				</div>
 			</div>
 		</div>
